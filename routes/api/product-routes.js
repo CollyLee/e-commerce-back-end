@@ -1,13 +1,8 @@
 const router = require('express').Router();
 const { Product, Category, Tag, ProductTag } = require('../../models');
 
-// The `/api/products` endpoint
-
-// get all products
+// FINDS ALL PRODUCTS, INCLUDING ANY ASSOCIATED CATEGORIES AND TAGS
 router.get('/', async (req, res) => {
-  // find all products
-  // be sure to include its associated Category and Tag data
-
     try {
       const productData = await Product.findAll({
       include: [{ model: Category }, {model: Tag, through: ProductTag, as: "Relevant Tags"}]
@@ -19,10 +14,8 @@ router.get('/', async (req, res) => {
 
 });
 
-// get one product
+// FINDS ONE PRODUCT BY ID, INCLUDING ANY ASSOCIATED CATEGORIES AND TAGS
 router.get('/:id', async (req, res) => {
-    // find a single product by its `id`
-// be sure to include its associated Category and Tag data
   try {
     const productData = await Product.findByPk(req.params.id, {
       include: [{ model: Category }, {model: Tag, through: ProductTag, as: "Relevant Tags"}]
@@ -39,7 +32,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// create new product
+// CREATES A NEW PRODUCT
 router.post('/', (req, res) => {
   /* req.body should look like this...
     {
@@ -71,7 +64,7 @@ router.post('/', (req, res) => {
     });
 });
 
-// update product
+// UPDATES A PRODUCT BASED ON THE PROVIDED ID
 router.put('/:id', (req, res) => {
   // update product data
   Product.update(req.body, {
@@ -113,7 +106,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
-// delete one product by its `id` value
+// DELETES ONE PRODUCT BASED ON THE PROVIDED ID
 router.delete('/:id', async (req, res) => {
   try {
     const productData = await Product.destroy({
